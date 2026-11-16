@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JWT Lab — decode, audit & attack JSON Web Tokens</title>
+<meta name="description" content="A browser lab for JSON Web Token security: decode, audit for vulnerabilities, crack weak HS256 secrets and forge tokens — all client-side.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">🔑</span> JWT<b>Lab</b></div>
+  <p class="tag">Decode, audit and attack JSON Web Tokens — 100% in your browser, nothing is sent anywhere.</p>
+</header>
+
+<main>
+  <section class="col">
+    <div class="panel">
+      <div class="row-head"><h2>Token</h2>
+        <div class="samples">
+          <button class="chip" data-sample="weak">weak HS256</button>
+          <button class="chip" data-sample="none">alg:none</button>
+          <button class="chip" data-sample="leaky">leaky claims</button>
+          <button class="chip" data-sample="clear">clear</button>
+        </div>
+      </div>
+      <textarea id="token" spellcheck="false" placeholder="Paste a JWT (eyJ...) or pick a sample above"></textarea>
+      <div id="tokenError" class="err"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Decoded</h2>
+      <label>Header <span id="algBadge" class="badge"></span></label>
+      <pre id="header" class="json" contenteditable="true" spellcheck="false"></pre>
+      <label>Payload <span class="muted" id="claimsInfo"></span></label>
+      <pre id="payload" class="json" contenteditable="true" spellcheck="false"></pre>
+      <p class="hint">💡 Payloads are only <b>base64url-encoded, not encrypted</b> — anyone can read them. Edit the JSON above, then re-sign on the right.</p>
+    </div>
+  </section>
+
+  <section class="col">
+    <div class="panel">
+      <h2>🔍 Security audit</h2>
+      <ul id="audit" class="audit"></ul>
+    </div>
+
+    <div class="panel">
+      <h2>✍️ Verify &amp; re-sign <small>(HS256)</small></h2>
+      <div class="field">
+        <input id="secret" placeholder="HMAC secret" value="secret" autocomplete="off">
+        <span id="verify" class="verify"></span>
+      </div>
+      <div class="actions">
+        <button id="resign" class="btn">Re-sign with this secret</button>
+        <button id="attackNone" class="btn ghost">Strip to alg:none</button>
+      </div>
+      <label>Result token</label>
+      <textarea id="output" class="out" readonly spellcheck="false"></textarea>
+      <button id="copy" class="btn small">Copy</button>
+    </div>
+
+    <div class="panel">
+      <h2>💥 Crack the HS256 secret</h2>
+      <p class="hint">Dictionary attack with WebCrypto. Load your own wordlist, or use the built-in demo list of common tutorial secrets.</p>
+      <div class="actions">
+        <button id="crack" class="btn">Crack (demo list)</button>
+        <label class="btn ghost file">Load wordlist…<input id="wordfile" type="file" accept=".txt" hidden></label>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+      <div id="crackResult" class="crack-result"></div>
+    </div>
+  </section>
+</main>
+<footer>Educational tool — test only tokens you own. Made by <a href="https://github.com/Martun1">Martin Ivanov</a> · <a href="https://github.com/Martun1/jwt-lab">source</a></footer>
+
+<script src="js/wordlist.js"></script>
+<script src="js/jwt.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
